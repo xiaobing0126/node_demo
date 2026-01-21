@@ -1,0 +1,14 @@
+/home  ::ffff:127.0.0.1
+/.well-known/appspecific/com.chrome.devtools.json  ::ffff:127.0.0.1
+/home  ::ffff:127.0.0.1
+/.well-known/appspecific/com.chrome.devtools.json  ::ffff:127.0.0.1
+/home  ::ffff:127.0.0.1
+/.well-known/appspecific/com.chrome.devtools.json  ::ffff:127.0.0.1
+ ::ffff:127.0.0.1
+ ::ffff:127.0.0.1
+127.0.0.1:3000 ::ffff:127.0.0.1 
+127.0.0.1:3000 ::ffff:127.0.0.1 
+/home ::ffff:127.0.0.1 
+/.well-known/appspecific/com.chrome.devtools.json ::ffff:127.0.0.1 
+/home ::ffff:127.0.0.1 
+/.well-known/appspecific/com.chrome.devtools.json ::ffff:127.0.0.1 

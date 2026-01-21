@@ -1,0 +1,45 @@
+{
+  "song": [
+    {
+      "id": "1",
+      "name": "Jay",
+      "singer": "五月天",
+      "url": "http://music.163.com/song/media/outer/url?id=133034.mp3",
+      "cover": "http://p1.music.126.net/3Yx3KX4Uu6b5l9V4E0lWwA==/109951163181329501.jpg"
+    },
+    {
+      "id": "2",
+      "name": "平凡之路",
+      "singer": "朴树",
+      "url": "http://music.163.com/song/media/outer/url?id=28938016.mp3",
+      "cover": "http://p1.music.126.net/3Yx3KX4Uu6b5l9V4E0lWwA==/109951163181329501.jpg"
+    },
+    {
+      "id": "9f58",
+      "name": "refrain",
+      "singer": "阿南亮子"
+    },
+    {
+      "id": "e985",
+      "name": "refrain",
+      "singer": "阿南亮子"
+    },
+    {
+      "id": "a2b3",
+      "name": "refrain",
+      "singer": "阿南亮子"
+    }
+  ],
+  "user": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": "2",
+      "username": "user",
+      "password": "user123"
+    }
+  ]
+}
