@@ -23,7 +23,7 @@ router.post("/login", function (req, res, next) {
           JWT_SECRET,
           {
             expiresIn: 60 * 60, //单位是秒
-          }
+          },
         );
         console.log("生成的 token 是：", token);
         // token由 前端放在请求头 token 里发送给后端
