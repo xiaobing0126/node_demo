@@ -15,7 +15,7 @@ git clone https://github.com/xiaobing0126/node_demo.git
 2. 进入项目目录
 
 ```bash
-cd node_demo/07*会话控制/04*记账本-token/accounts
+cd node_demo/07_会话控制/04_记账本-token/accounts
 ```
 
 3. 安装依赖
