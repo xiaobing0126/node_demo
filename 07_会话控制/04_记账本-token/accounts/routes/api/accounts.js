@@ -36,8 +36,8 @@ router.get("/accounts", checkTokenWares, async function (req, res, next) {
   //   return res.json({ error: "无效的token" });
   // }
 
-  // 获取 mongodb 数据库中的数据
-  await AccountModel.find()
+  // 获取 mongodb 数据库中的数据（按用户 ID 筛选）
+  await AccountModel.find({ userId: req.user.userId })
     .sort({ time: -1 })
     .lean()
     .then((data) => {
@@ -77,16 +77,19 @@ router.delete("/accounts/:id", checkTokenWares, function (req, res, next) {
   let id = req.params.id;
   console.log("id---", id);
   // db.get("accounts").remove({ id: id }).write();
-  // 删除 mongodb 数据库中的数据
-  AccountModel.deleteOne({ _id: id })
+  // 删除 mongodb 数据库中的数据（只能删除自己的账单）
+  AccountModel.deleteOne({ _id: id, userId: req.user.userId })
     .then((data) => {
+      if (data.deletedCount === 0) {
+        return res.json({ code: "1003", msg: "账单不存在或无权删除" });
+      }
       console.log("删除成功", data);
+      res.json({ code: "0000", msg: "删除成功" });
     })
     .catch((err) => {
       console.error("删除失败", err);
+      res.status(500).json({ error: "删除失败" });
     });
-  //   res.render("success", { msg: "删除成功，可前往列表查看" });
-  res.json({ code: "0000", msg: "删除成功" });
 });
 
 // 创建账单请求
@@ -101,10 +104,11 @@ router.post("/accounts", checkTokenWares, function (req, res, next) {
   //   .unshift({ id: id, ...req.body })
   //   .write();
 
-  // 保存数据到 mongodb 数据库中
+  // 保存数据到 mongodb 数据库中（添加用户 ID）
   AccountModel.create({
     ...req.body,
     time: moment(req.body.time).toDate(), // 注意 time 字段需要转为 Date 对象
+    userId: req.user.userId, // 关联当前登录用户
   })
     .then((data) => {
       console.log("添加成功", data);
@@ -122,9 +126,13 @@ router.get("/accounts/:id", checkTokenWares, function (req, res, next) {
   console.log("id---", id);
 
   // lean() 方法的作用是把 Mongoose 的文档对象转换为普通的 JavaScript 对象
-  AccountModel.findById(id) // 根据id查询
+  // 同时验证该账单是否属于当前用户
+  AccountModel.findOne({ _id: id, userId: req.user.userId })
     .lean()
     .then((data) => {
+      if (!data) {
+        return res.json({ code: "1003", msg: "账单不存在或无权访问" });
+      }
       console.log("查询成功", data);
       res.json({ code: "0000", msg: "查询成功", result: data });
     })
@@ -140,14 +148,18 @@ router.put("/accounts/:id", checkTokenWares, function (req, res, next) {
   console.log("id---", id);
   console.log("更新数据---", req.body);
 
+  // 只能更新自己的账单
   AccountModel.updateOne(
-    { _id: id },
+    { _id: id, userId: req.user.userId },
     {
       ...req.body,
       time: moment(req.body.time).toDate(), // 注意 time 字段需要转为 Date 对象
-    }
+    },
   )
     .then((data) => {
+      if (data.matchedCount === 0) {
+        return res.json({ code: "1003", msg: "账单不存在或无权更新" });
+      }
       console.log("更新成功", data);
       res.json({ code: "0000", msg: "更新成功" });
     })

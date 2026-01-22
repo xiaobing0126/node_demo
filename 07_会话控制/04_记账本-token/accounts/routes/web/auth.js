@@ -49,11 +49,13 @@ router.post("/login", function (req, res, next) {
     .then((data) => {
       if (data) {
         console.log("登陆成功", data);
-        // 设置 session
+        // 设置 session（包含用户 ID）
         req.session.user = {
+          userId: data._id,
           username: data.name,
           role: "admin",
         };
+        console.log("output->用户session", req.session.user);
         res.redirect("/accounts/list");
       } else {
         console.log("用户名或密码错误");

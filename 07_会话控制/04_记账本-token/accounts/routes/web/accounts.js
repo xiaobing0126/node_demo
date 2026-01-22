@@ -20,7 +20,7 @@ const checkIsLogin = require("../../middlewares/checkLoginWares");
 
 router.use(checkIsLogin);
 
-// 账户列表
+// 账单列表
 router.get("/list", async function (req, res, next) {
   //   res.send("账户列表");
   // 这个list对应view/list.ejs文件
@@ -28,15 +28,15 @@ router.get("/list", async function (req, res, next) {
   // let accounts = db.get("accounts").value();
   // console.log("列表数据---", accounts);
 
-  // 获取 mongodb 数据库中的数据
-  await AccountModel.find()
+  // 获取 mongodb 数据库中的数据（按用户 ID 筛选）
+  await AccountModel.find({ userId: req.session.user.userId })
     .sort({ time: -1 })
     .lean()
     .then((data) => {
       data.forEach((item) => {
         item.time = moment(item.time).format("YYYY-MM-DD");
       });
-      console.log("列表数据2222---", data);
+      console.log("output->获取账单列表数据", req.session.user.username, data);
       res.render("list", { accounts: data, user: req.session.user });
     })
     .catch((err) => {
@@ -47,6 +47,7 @@ router.get("/list", async function (req, res, next) {
 // 创建账单页面 - 必须放在 /:id 之前，否则 create 会被当作 id 参数
 router.get("/create", function (req, res, next) {
   //   res.send("账户创建");
+  console.log("output->", "这是账单创建列表页面啊！");
   res.render("create", { user: req.session.user });
 });
 
@@ -68,7 +69,7 @@ router.get("/:id", function (req, res, next) {
 
 // 创建账单请求
 router.post("/create", function (req, res, next) {
-  console.log(req.body);
+  console.log("output->创建账单请求", req.body, req.session.user.userId);
   // 这是写入本地json文件的方法
   // // 保存数据到data/accounts.json中
   // //生成 id
@@ -78,10 +79,11 @@ router.post("/create", function (req, res, next) {
   //   .unshift({ id: id, ...req.body })
   //   .write();
 
-  // 保存数据到 mongodb 数据库中
+  // 保存数据到 mongodb 数据库中（添加用户 ID）
   AccountModel.create({
     ...req.body,
     time: moment(req.body.time).toDate(), // 注意 time 字段需要转为 Date 对象
+    userId: req.session.user.userId, // 关联当前登录用户
   })
     .then((data) => {
       console.log("添加成功", data);

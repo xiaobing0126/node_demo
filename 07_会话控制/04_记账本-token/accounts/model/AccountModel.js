@@ -23,6 +23,11 @@ let AccountSchema = new mongoose.Schema({
   remarks: {
     type: String,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users", // 关联用户集合
+    required: true,
+  },
 });
 
 // 创建集合对象

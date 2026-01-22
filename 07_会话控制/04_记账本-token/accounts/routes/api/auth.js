@@ -18,6 +18,7 @@ router.post("/login", function (req, res, next) {
         // 生成 token
         let token = jwt.sign(
           {
+            userId: data._id, // 存储用户 ID
             username: data.name,
           },
           JWT_SECRET,
